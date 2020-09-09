@@ -10,7 +10,7 @@ typedef struct node Node;
 struct list {
   struct node* start;
   struct node* end;
-  int length; 
+  int size; 
 };
 
 typedef struct list List;
@@ -25,7 +25,7 @@ int main() {
 List* initializeList(void) {
   List* list = (List*) malloc(sizeof(List));
   list->start = list->end = NULL;
-  list->length = 0;
+  list->size = 0;
   return list;
 }
 
@@ -42,26 +42,33 @@ void insertAtTheBeginning(List* list, int value) {
       list->end = node;
     }
     list->start = node;
-    list->length++;
+    list->size++;
 }
 
 void insertAtTheEnd(List* list, int value) {
-    if(list->length = 0) {
-      return insertAtTheBeginning(list, value);
-    }
+    if(list->size == 0) {
+      insertAtTheBeginning(list, value);
+    }else
+    {
+        
+  
+    
     Node* node = createNode(value);
     node->next = NULL;
     list->end->next = node;
     list->end = node;
-    list->length++;
+    list->size++;
+      }
 }
 
 void insertInTheMiddle(List* list, int value, int position) {
-  if(list->length = 0 || position <= 1) {
-    return insertAtTheBeginning(list, value);
-  }else if(position >= list->length){
-    return insertAtTheEnd(list, value);
-  }
+  if(list->size == 0 || position <= 1) {
+     insertAtTheBeginning(list, value);
+  }else if(position >= list->size){
+     insertAtTheEnd(list, value);
+  }else{
+
+  
   Node* node = createNode(value);
   Node* current = list->start;
   for (int i = 1; i < position; i++)
@@ -70,5 +77,54 @@ void insertInTheMiddle(List* list, int value, int position) {
   }
   node->next = current->next;
   current->next = node;
-  list->length++;
+  list->size++;
+  }
+}
+
+void removeFromTheBeginning(List* list) {
+    if(list->size < 1) {
+      printf("Cannot remove from an empty list");
+    }else{
+    Node* start = list->start;
+    list->start = start->next;
+    free(start);
+    list->size--;
+    }
+}
+
+void removeFromTheEnd(List* list) {
+    if(list->size < 1) {
+        printf("Cannot remove from an empty list");
+    }else if(list->size == 1) {
+        removeFromTheBeginning(list);
+    }else{
+    Node* current = list->start;
+    for (int i = 1; i < list->size; i++) {
+      current = current->next;
+    }
+  free(current->next);
+  current->next = NULL;
+  list->end = current;
+  list->size--;
+  }
+}
+
+void removeFromTheMiddle(List* list, int position) {
+    if(list->size < 1) {
+        printf("Cannot remove from an empty list");
+    }else if(list->size == 1) {
+        removeFromTheBeginning(list);
+    }else if(list->size <= position){
+        removeFromTheEnd(list);
+    }else {
+      Node* current = list->start;
+      for (int i = 1; i < list->size; i++) {
+        current = current->next;
+      }
+      Node* toRemove = current->next;
+      current->next = toRemove->next;
+      toRemove->next = NULL;
+      free(toRemove);
+      list->size--;
+    }
 }
