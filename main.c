@@ -50,9 +50,6 @@ void insertAtTheEnd(List* list, int value) {
       insertAtTheBeginning(list, value);
     }else
     {
-        
-  
-    
     Node* node = createNode(value);
     node->next = NULL;
     list->end->next = node;
@@ -66,15 +63,9 @@ void insertInTheMiddle(List* list, int value, int position) {
      insertAtTheBeginning(list, value);
   }else if(position >= list->size){
      insertAtTheEnd(list, value);
-  }else{
-
-  
+  }else{  
   Node* node = createNode(value);
-  Node* current = list->start;
-  for (int i = 1; i < position; i++)
-  {
-      current = current->next;
-  }
+  Node* current = getCurrentNode(list, position);
   node->next = current->next;
   current->next = node;
   list->size++;
@@ -98,10 +89,7 @@ void removeFromTheEnd(List* list) {
     }else if(list->size == 1) {
         removeFromTheBeginning(list);
     }else{
-    Node* current = list->start;
-    for (int i = 1; i < list->size; i++) {
-      current = current->next;
-    }
+    Node* current = getCurrentNode(list, list->size);
   free(current->next);
   current->next = NULL;
   list->end = current;
@@ -117,14 +105,44 @@ void removeFromTheMiddle(List* list, int position) {
     }else if(list->size <= position){
         removeFromTheEnd(list);
     }else {
-      Node* current = list->start;
-      for (int i = 1; i < list->size; i++) {
-        current = current->next;
-      }
+      Node* current = getCurrentNode(list, list->size);
       Node* toRemove = current->next;
       current->next = toRemove->next;
       toRemove->next = NULL;
       free(toRemove);
       list->size--;
     }
+}
+
+void printList(List* list) {
+    Node* current = list->start;
+    for (int i = 1; i <= list->size; i++) {
+        printf("%d --> ", current->value);
+        current = current->next;
+    }
+}
+
+Node* searchNodeByPosition(List* list, int position) {
+    int currentPosition = position + 1;
+    Node* result = getCurrentNode(list, currentPosition);
+    return result;
+}
+
+Node* searchNodeByValue(List* list, int value) {
+    Node* current = list->start;
+      for (int i = 1; i < list->size; i++) {
+          if(current->value == value) {
+              break;
+          }
+        current = current->next;
+      }
+    return current;
+}
+
+Node* getCurrentNode(List* list, int limitValue) {
+    Node* current = list->start;
+      for (int i = 1; i < limitValue; i++) {
+        current = current->next;
+      }
+    return current;
 }
