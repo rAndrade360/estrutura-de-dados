@@ -6,7 +6,7 @@
 struct element
   {
     struct element* next;
-    int value;
+    char value[];
   };
 
 typedef struct element Element;
@@ -28,13 +28,13 @@ Queue* initializeQueue() {
   return queue;
 }
 
-Element* createElement(int value) {
+Element* createElement(char* value) {
   Element* element = (Element*) malloc(sizeof(Element));
-  element->value = value;
+  strcpy(element->value, value);
   return element;
 }
 
-void insertAtTheEnd(Queue* queue, int value) {
+void insertAtTheEnd(Queue* queue, char* value) {
   Element* element = createElement(value);
   element->next = NULL;
   if(queue->size < 1) {
@@ -61,7 +61,7 @@ void removeFromBeginning(Queue* queue) {
 void printQueue(Queue* queue) {
   for (Element* element = queue->start; element != NULL; element = element->next)
   {
-    printf("%d <-- ", element->value);
+    printf("%s <-- ", element->value);
   }
   printf("NULL");
 }
@@ -76,7 +76,10 @@ void menu() {
 
 int main () {
   int option;
+  unsigned int sizeOfValue = 20;
   Queue* queue = initializeQueue();
+  char* value = (char*) malloc(sizeof(char)*sizeOfValue);
+
 
   do
   {
@@ -86,10 +89,9 @@ int main () {
 
     switch (option)
     {
-      int value;
     case 1:
       printf("\nEnter a value: ");
-      scanf("%d", &value);
+      scanf("%s", value);
       insertAtTheEnd(queue, value);
       printf("\nSuccess!\n");
       break;
