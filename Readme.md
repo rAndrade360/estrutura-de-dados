@@ -1,4 +1,4 @@
-# Estrutura de dados
+# Estruturas de dados
 
 Projeto resultado da matéria de Estrutura de dados do curso de Bacharelado em Engenharia de Computação.
 
