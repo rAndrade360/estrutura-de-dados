@@ -6,7 +6,7 @@
 struct element
   {
     struct element* next;
-    int value;
+    char value[];
   };
 
 typedef struct element Element;
@@ -26,13 +26,13 @@ Stack* initializeStack() {
   return stack;
 }
 
-Element* createElement(int value) {
+Element* createElement(char* value) {
   Element* element = (Element*) malloc(sizeof(Element));
-  element->value = value;
+  strcpy(element->value, value);
   return element;
 }
 
-void insertAtTheBeginning(Stack* stack, int value) {
+void insertAtTheBeginning(Stack* stack, char* value) {
   Element* element = createElement(value);
   element->next = stack->start;
   stack->start = element;
@@ -53,7 +53,7 @@ void removeFromBeginning(Stack* stack) {
 void printStack(Stack* stack) {
   for (Element* element = stack->start; element != NULL; element = element->next)
   {
-    printf("[     %d     ]\n", element->value);
+    printf("[     %s     ]\n", element->value);
   }
 }
 
@@ -68,6 +68,9 @@ void menu() {
 int main () {
   int option;
   Stack* stack = initializeStack();
+  unsigned int sizeOfValue = 20;
+  char* value = (char*) malloc(sizeof(char)*sizeOfValue);
+
 
   do
   {
@@ -77,10 +80,9 @@ int main () {
 
     switch (option)
     {
-      int value;
     case 1:
       printf("\nEnter a value: ");
-      scanf("%d", &value);
+      scanf("%s", value);
       insertAtTheBeginning(stack, value);
       printf("\nSuccess!\n");
       break;
